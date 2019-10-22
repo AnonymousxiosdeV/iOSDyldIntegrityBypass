@@ -1,5 +1,5 @@
 # iOSDyldIntegrityBypass
-Guide and Tweak on how to bypass applications compiled with Integrity checks. Designed for Jailed ios tweaks.
+Guide and Tweak on how to bypass applications compiled with Integrity checks. Designed for Jailed ios tweaks. If it's helpful for you, throw a Star and Follow me for future open source tweak release around some popular games.
 
 Expected tools avialable:
 - Xcode
