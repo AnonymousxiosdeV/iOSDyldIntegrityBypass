@@ -16,9 +16,10 @@
 #pragma mark Shared Variable Declarations
     int swapLC = 0;
     int swapCS = 0;
-    //uint8_t lcData[0x4000] = {0xcf,0xfa,0x00,ETC ETC};
+
+    uint8_t lcData[0x4000] = {0xcf,0xfa,0x00};
     
-    //uint8_t csData[0x1000] = {0x6D,0x6B,ETC ETC};
+    uint8_t csData[0x1000] = {0x6D,0x6B};
 
 #pragma mark Bypass Functions
     // Store orig imp to pointer

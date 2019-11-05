@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C9C6477D235692340021C977"
-               BuildableName = "libPGHack.a"
-               BlueprintName = "PGHack"
-               ReferencedContainer = "container:PGHack.xcodeproj">
+               BuildableName = "libDyldProject.a"
+               BlueprintName = "DyldProject"
+               ReferencedContainer = "container:DyldProject.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,9 +46,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9C6477D235692340021C977"
-            BuildableName = "libPGHack.a"
-            BlueprintName = "PGHack"
-            ReferencedContainer = "container:PGHack.xcodeproj">
+            BuildableName = "libDyldProject.a"
+            BlueprintName = "DyldProject"
+            ReferencedContainer = "container:DyldProject.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -64,9 +64,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C9C6477D235692340021C977"
-            BuildableName = "libPGHack.a"
-            BlueprintName = "PGHack"
-            ReferencedContainer = "container:PGHack.xcodeproj">
+            BuildableName = "libDyldProject.a"
+            BlueprintName = "DyldProject"
+            ReferencedContainer = "container:DyldProject.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

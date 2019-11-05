@@ -27,7 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		C9C6477E235692340021C977 /* libPGHack.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPGHack.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9C6477E235692340021C977 /* libDyldProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDyldProject.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9C64781235692340021C977 /* PGHack.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PGHack.h; sourceTree = "<group>"; };
 		C9C64782235692340021C977 /* PGHack.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PGHack.m; sourceTree = "<group>"; };
 		C9C6478C235692F90021C977 /* fishhook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fishhook.c; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		C9C64775235692340021C977 = {
 			isa = PBXGroup;
 			children = (
-				C9C64780235692340021C977 /* PGHack */,
+				C9C64780235692340021C977 /* IntegrityBypass */,
 				C9C6477F235692340021C977 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -58,12 +58,12 @@
 		C9C6477F235692340021C977 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C9C6477E235692340021C977 /* libPGHack.a */,
+				C9C6477E235692340021C977 /* libDyldProject.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		C9C64780235692340021C977 /* PGHack */ = {
+		C9C64780235692340021C977 /* IntegrityBypass */ = {
 			isa = PBXGroup;
 			children = (
 				C9C647902356972C0021C977 /* dyldBypass */,
@@ -71,7 +71,7 @@
 				C9C64781235692340021C977 /* PGHack.h */,
 				C9C64782235692340021C977 /* PGHack.m */,
 			);
-			path = PGHack;
+			path = IntegrityBypass;
 			sourceTree = "<group>";
 		};
 		C9C6478B235692E30021C977 /* fishhook */ = {
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C9C6477D235692340021C977 /* PGHack */ = {
+		C9C6477D235692340021C977 /* DyldProject */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C9C64787235692340021C977 /* Build configuration list for PBXNativeTarget "PGHack" */;
+			buildConfigurationList = C9C64787235692340021C977 /* Build configuration list for PBXNativeTarget "DyldProject" */;
 			buildPhases = (
 				C9C6477A235692340021C977 /* Sources */,
 				C9C6477B235692340021C977 /* Frameworks */,
@@ -108,9 +108,9 @@
 			);
 			dependencies = (
 			);
-			name = PGHack;
+			name = DyldProject;
 			productName = PGHack;
-			productReference = C9C6477E235692340021C977 /* libPGHack.a */;
+			productReference = C9C6477E235692340021C977 /* libDyldProject.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -127,7 +127,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C9C64779235692340021C977 /* Build configuration list for PBXProject "PGHack" */;
+			buildConfigurationList = C9C64779235692340021C977 /* Build configuration list for PBXProject "DyldProject" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -139,7 +139,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C9C6477D235692340021C977 /* PGHack */,
+				C9C6477D235692340021C977 /* DyldProject */,
 			);
 		};
 /* End PBXProject section */
@@ -160,7 +160,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcrun --sdk iphoneos clang -arch arm64 -shared -all_load \\\n-o libOut/libPoGoHack.dylib ${BUILT_PRODUCTS_DIR}/libPGHack.a\n";
+			shellScript = "xcrun --sdk iphoneos clang -arch arm64 -shared -all_load \\\n-o libOut/DyldBypass.dylib ${BUILT_PRODUCTS_DIR}/libDyldProject.a\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -318,7 +318,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C9C64779235692340021C977 /* Build configuration list for PBXProject "PGHack" */ = {
+		C9C64779235692340021C977 /* Build configuration list for PBXProject "DyldProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C9C64785235692340021C977 /* Debug */,
@@ -327,7 +327,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C9C64787235692340021C977 /* Build configuration list for PBXNativeTarget "PGHack" */ = {
+		C9C64787235692340021C977 /* Build configuration list for PBXNativeTarget "DyldProject" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C9C64788235692340021C977 /* Debug */,
