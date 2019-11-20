@@ -1,25 +1,31 @@
 # iOSDyldIntegrityBypass
-Guide and Tweak on how to bypass applications compiled with Integrity checks. Designed for Jailed ios tweaks. If it's helpful for you, throw a Star and Follow me for future open source tweak release around some popular games.
+This Repo is a proof of concept for a simple method for bypass applications that use dyld integrity checks that will exit due to Dyld's CrashIfInvalidCodeSignature() method. 
 
-Expected tools avialable:
+If it's helpful for you, throw a Star and Follow me for future open source tweak release around some popular games.
+
+Expected Software/Tools:
 - Xcode
-- Theos and Theos-Jailed
 - Facebooks Fishhook library (Available on github)
+
+Alternative Tools:
+- Theos
+- Theos-jailed (Theos extension that includes templates for handling dynamic library generation from your tweak and load command injection)
 
 ## General Overview
 Applications compiled with iOS dynamic linker (Dyld) file integrity protection will crash on launch when working with a cracked and/or resigned binary. Since we require a decrypted binary to inject any tweaks, preparation on how to bypass these basic FIP protocols is critical for both Jailbreak and Jailed tweak developers.
 
 ### Identifying an application is crashing due to Dyld?
-You have a cracked/decrypted binary, you injected your tweak, but the application crashes on launch. Check out your devices crash log. If the crash log show's the main thread never makes it past `_dyld_start`, guess what!? Dyld is killing you!?
+You have a cracked/decrypted binary, you injected your tweak, but the application crashes on launch. Check out your devices crash log. If the crash log show's the main thread never makes it past `_dyld_start`, guess what!? It's 99% likely that this Dyld option is killing you!?
   
 ### What is Dyld doing?
 Thankfully the source for dyld, like much of Apple's work, is open and available via apple directly at either, https://github.com/opensource-apple or https://opensource.apple.com. 
-This repo isn't to break down how dyld operates, but it is HIGHLY recommended you become familiar with the process flow for opening and executing a binary of iOS systems if you want to have a proper understanding of how it flags you, and why this bypass works.
 
-Pay attention to `ImageLoaderMachO.h` and trace back through dyld's source to get a good idea of what's going on.
+This is not a crash course in Dyld operations, but to provide enough context to allow you to get up and running past this protection.
+
+I highly suggest educating yourself on the general MachO Executable structure, and tracing through Dyld source if you seek to understand what is going on here under the hood. Pay attention to `ImageLoaderMachO.h`.
 
 ### Let's watch what's happening.
-If you were to use fishhook or another method to rebind symbols on runtime, and monitored open(), read(), close() you will find 2 calls that should stand out. On the application i was investigating I received.
+If you were to use fishhook or another method to rebind symbols on runtime, and monitored open(), read(), close() you will find 2 calls that should stand out.
 
 1) Open() called on original binary image
 2) Read() for 4 Mem Pages (0x4000 Bytes on iOS 64 bit systems)
@@ -34,22 +40,24 @@ The 2nd read() is located such that the end of this page worth of data includes 
 
 Given that I could now see where the application was being validated, it's time to give dyld what it wants :wink:
 
-I provided the file locateTarget.xm tweak (Theos tweakfile type) to inject into your target IPA. The output will be the first 8 bytes of the 0x1000 byte read. Use this too look at your original stock binary from the appstore, and get the full 0x1000 unmodified hex data. 
-Grab the original 0x4000 bytes from the original binary while your're already looking at it and now we can make a bypass. 
+Within the Theos based branch of this project, you can find some samples on how you can easily identify the first however many bytes you'd like to find the starting location of this memory page in the stock encrypted binary target.
+
+Gather up the initial 0x4000 bytes from the original binary while your're already looking at it and now we can make a bypass. 
 
 ## Crafting your bypass dylib.
 For my example, we know that:
-1) A read of the first 4 pages (0x4000 Bytes) will be performed, and expects original unmodified binary's data.
+1) A read of the first 4 pages (0x4000 Bytes) will be performed, and expects original unmodified binary's data. Dyld will use this to identify the location 
 2) A read of 1 page (0x1000 Bytes) will be performed, and expects again, original unmodified binary's data
 
 The basic bypass template is available in the bypassDyld folder of the repo. I generalized this into an objectic-c header and .m file so that it could be used with more than a Theos jailed project. 
 
 The bypass is as simple as it sounds. 
 1) Hardcode the stock first 4 memory pages into a uint8_t byte array
-2) Hardcode the memory page you found earlier into a uint8_t byte array.
+2) Hardcode the memory page for the code signature validation into a uint8_t byte array.
 3) Create a custom read() implementation, and declare a pointer func to hold the original implementation
-4) In the custom read, if the size of the read is 0x4000 bytes, and you have no swapped them yet with a global counter, memcpy the original 4 memory pages into place when read() is invoked. The same logic is applied for the next 0x1000 Byte block, and the global counter upped, such that you don't interfere with any further read() calls of these sizes. If neither of the 2 cases are true, it returns the original implementation with original args.
-5) Create an init call, where you invoke fishhooks symbol rebinding. 
+4) In the custom read, check if size of read is 0x4000 bytes, and you have not swapped them yet with a global counter, memcpy the original 4 memory pages into place after returning original read() Within your implementation. The same logic is applied for the next 0x1000 Byte block, and the global counter upped, such that you don't interfere with any further read() calls of these sizes. If neither of the 2 cases are true, returns the original implementation with original args.
+5) Create an init call, where you invoke fishhooks symbol rebinding.
+
 To invoke the bypass, you simply need to invoke the Init call in a constructor block (%ctor in logos) and off you go.
 
 ### How to use it?
@@ -57,4 +65,4 @@ However you want!? I've personally used a static framework template project in x
 
 The world is your oyster.
 
-Shout out to Jorg and The silly Canadaian who helped hold my hand as I learned enough C++ to read through source and implement this. <3
+Shout out to Jorg and The silly Canadaian who helped hold my hand as I learned enough C/C++ to read through source and implement this. <3
