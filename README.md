@@ -24,7 +24,7 @@ This is not a crash course in Dyld operations, but to provide enough context to 
 
 I highly suggest educating yourself on the general MachO Executable structure, and tracing through Dyld source if you seek to understand what is going on here under the hood. Pay attention to `ImageLoaderMachO.h`.
 
-### Let's watch what's happening.
+### Dyld versions packaged in iOS versions 12.2 and greater.
 If you were to use fishhook or another method to rebind symbols on runtime, and monitored open(), read(), close() you will find 2 calls that should stand out.
 
 1) Open() called on original binary image
@@ -44,9 +44,20 @@ Within the Theos based branch of this project, you can find some samples on how 
 
 Gather up the initial 0x4000 bytes from the original binary while your're already looking at it and now we can make a bypass. 
 
+## Dyld versions in iOS versions 11.*  to <12.2
+Dyld versions packaged in iOS between 11 and under 12.2 use a slightly different validation, but the general methedology for mocking the data is the same. 
+
+For these versions, the initial read on the target binary is the first 0x10000 Bytes, and then validates this against the hashes of these pages from the code signature. 
+
+1) Grab first 0x10000 and put them into a uint8_t/Byte Array
+2) Run a quick version to log out the first 8 or so bytes on the 2nd read to identify where the second segment is to start
+3) Grab the 0x10000 bytes at this location and all set
+4) Add some sort of global counter or such to ensure that when it reads you know which array you are memcpy-ing into place.
+5) Your target App runs. :magic:
+
 ## Crafting your bypass dylib.
 For my example, we know that:
-1) A read of the first 4 pages (0x4000 Bytes) will be performed, and expects original unmodified binary's data. Dyld will use this to identify the location 
+1) A read of the first 4 pages (0x4000 Bytes) will be performed, and expects original unmodified binary's data. Dyld will use thiis to identify the location 
 2) A read of 1 page (0x1000 Bytes) will be performed, and expects again, original unmodified binary's data
 
 The basic bypass template is available in the bypassDyld folder of the repo. I generalized this into an objectic-c header and .m file so that it could be used with more than a Theos jailed project. 
